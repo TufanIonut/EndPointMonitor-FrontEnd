@@ -2,7 +2,7 @@
 <html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
-    <title>Admin</title>
+    <title>EndpointMonitor</title>
     <link rel="stylesheet" href="../../static/css/main/dashboard.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -39,7 +39,7 @@
 
     <div class="logo-details">
       <i class='bx bx-desktop icon'></i>
-        <div class="logo_name">iTecMonitor</div>
+        <div class="logo_name">EndpointMonitor</div>
         <i class='bx bx-menu' id="btn" ></i>
     </div>
 
@@ -65,7 +65,7 @@
 
      <li>
        <a href="#" class="comments" id="notifications">
-        <div id="notificationBadge" class="notification-badge">3</div>
+        <div id="notificationBadge" class="notification-badge">0</div>
          <i class='bx bx-bell' ></i>
          <span class="links_name">Notifications</span>
        </a>
@@ -121,43 +121,14 @@
                 <a href="../../templates/auth/register.html" class="authLink"><button class="authButton"><i class="fas fa-user-plus" style="margin-right: 5px;"></i>Register</button></a>
             </div>
           </div>
-
- 
-
-          <script>
-            function notifyMe() {
-              if (!("Notification" in window)) {
-                // Check if the browser supports notifications
-                alert("This browser does not support desktop notification");
-              } else if (Notification.permission === "granted") {
-                // Check whether notification permissions have already been granted;
-                // if so, create a notification
-                const notification = new Notification("Hi there!");
-                // …
-              } else if (Notification.permission !== "denied") {
-                // We need to ask the user for permission
-                Notification.requestPermission().then((permission) => {
-                  // If the user accepts, let's create a notification
-                  if (permission === "granted") {
-                    const notification = new Notification("Hi there!");
-                    // …
-                  }
-                });
-              }
-        
-              // At last, if the user has denied notifications, and you
-              // want to be respectful there is no need to bother them anymore.
-            }
-          </script>
-
-          
+   
         <div class="card-container" id="cards">
           <div class="card" id="card">
               <div class="circle" style="background: green;">
                   <span class="number">Stable</span>
               </div>
               <div class="card-image">
-                  <img src="../../static/images/auth/background.jpg" >
+                  <img src="../../static/images/main/applications/123.jpg" >
               </div>
               <div class="card-content2">
                   <h3>ChatApp</h3>
@@ -166,10 +137,93 @@
                       <p id="free" class="free">USER1</p>
                       <p id="long" class="free">10/02/2024</p>
                   </div>
-                  <button class="reportBug">Check endpoints</button>
+                  <div class="card-content3">
+                    <button class="reportBug" style="color: red;" >Check endpoints</button>
+
+                  </div>
+                  <button class="reportBug2" id="viewReportsForApp" onclick="viewReportsApp()" >View reports</button>
+                  <button class="reportBug3" id="viewComms" onclick="viewComments()" >View comments</button>
               </div>
           </div>
         </div>
+
+      <!--REPORTS popup-->
+      <div id="viewReportsApp" class="popup-container10">
+        <div class="content">
+          <div class="formbold-main-wrapper">
+            <div class="formbold-form-wrapper">
+              <button id="closeButtonReportsApp" type="button" class="close" aria-hidden="true" onclick="cancelViewHistoryAppModal()">&times;</button>
+              <div class="formbold-mb-5">
+                
+                <label for="timeFilter" style="color: black;">Filter by:</label>
+                <select id="timeRangeSelector">
+                  <option value="24h">Last 24 Hours</option>
+                  <option value="1m">This Month</option>
+                  <option value="1y">This Year</option>
+                </select>
+                <canvas id="reportChart" width="400" height="200"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+            <div id="viewComments" class="popup-container10">
+              <div class="content">
+                <div class="formbold-main-wrapper">
+                  <div class="formbold-form-wrapper">
+                    <button id="closeButtonComments" type="button" class="close" aria-hidden="true" onclick="cancelViewComments()">&times;</button>
+                    <div class="formbold-mb-5">
+                      
+                      <div id="containerCom">
+
+                        
+                        <div id="form_containerCom">
+                          <textarea placeholder="Add your comment here" type="text" id="comment_text"></textarea>
+                          <div class="tooltipCom">
+                              !
+                              <span class="tooltip-textCom">Please note that profane or offensive language will be removed.</span>
+                          </div>
+                          <div id="button_containerCom">
+                              <button id="submitCom">Post your comment</button>
+                          </div>
+                          <div id="youHave" style="color: black;">You have to be authentificated to post a comment!</div>
+                      </div>
+                    
+                        <div id="output_containerCom" class="comment_containerCom">
+
+
+                            <div class="commentCom" hidden>
+                                <div class="comment-headerCom">
+                                    <p class="usernameCom" id="usernameCom">alexandrukeryx@gmail.com</p>
+                                </div>
+                                <div class="comment-textCom">
+                                    <p id="commentCom">This is a commentary! WOW I WANT THIS APPLICATION VERY MUCH ITS AWESOME!</p>
+                                </div>
+                                <div class="comment-dateCom">
+                                  <p id="dateCom">16 may 2024 15:00:00</p>
+                              </div>
+                            </div>
+
+
+
+
+                        </div>
+
+                            
+                        </div>
+                        <div id="comment_countCom"><span id="numberOfComments">0</span> comments</div>
+                    </div>
+                    
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
     </section>
 </div>
 </section>
@@ -290,6 +344,15 @@
             <input type="file" name="file" id="applicationImage" required />
 
 	          <div>
+
+              <div class="mb-0 pt-0">
+                <label class="formbold-form-label formbold-form-label-2">
+                  Upload picture twice (for security reasons) <span class="required"> *</span>
+                </label>
+      
+                <input type="file" name="file" id="applicationImage2" required />
+    
+                <div>
 	            <button class="formbold-btn w-full" id="addApplicationBtn" style="margin-top: 20px;">
 	              Upload Application
 	            </button>
@@ -324,6 +387,10 @@
             <option value="2">UNSTABLE</option>
             <option value="3">DOWN</option>
           </select>
+          <div class="search2">
+            <input type="text" placeholder="Search Endpoint" oninput="searchEndpoints(event)">
+            <button><i class="fas fa-search"></i></button>
+        </div>        
         </div>
         </div>
       </div>
@@ -528,7 +595,7 @@
           </div>
       </div>
 
-      <button class="addAppButton" onclick="notifyMe()" style="width: 400px;">Enable browser notifications</button>
+      <!--<button class="addAppButton" onclick="notifyMe()" style="width: 400px;">Enable browser notifications</button> -->
 
       <ul class="comment-list" id="notificationWrapper">
           <li class="idea" id="notification" hidden>
@@ -572,7 +639,7 @@
                 <div class="card-body">
                   <div class="media d-flex">
                     <div class="media-body text-left">
-                      <h3 class="warning" id="totalApplicationsLabel">50</h3>
+                      <h3 class="warning" id="totalApplicationsLabel">Loading...</h3>
                       <span style="color: white;">Total Applications</span>
                     </div>                  
                     <div class="align-self-center">
@@ -589,7 +656,7 @@
                 <div class="card-body">
                   <div class="media d-flex">
                     <div class="media-body text-left">
-                      <h3 class="primary" id="totalEndpointsGeneralLabel">130</h3>
+                      <h3 class="primary" id="totalEndpointsGeneralLabel">Loading...</h3>
                       <span style="color: white;">Total Endpoints</span>
                     </div>
                     <div class="align-self-center">
@@ -607,7 +674,7 @@
                 <div class="card-body">
                   <div class="media d-flex">
                     <div class="media-body text-left">
-                      <h3 class="danger" id="totalUsersLabel">9</h3>
+                      <h3 class="danger" id="totalUsersLabel">Loading...</h3>
                       <span style="color: white;">Total Users</span>
                     </div>
                     <div class="align-self-center">
@@ -628,8 +695,8 @@
                 <div class="card-body cleartfix">
                   <div class="media d-flex">
                     <div class="media-body text-left">
-                      <h1 class="primary" id="totalEndpointCallsLabel">1420</h1>
-                      <h4 style="color: white;">Total Endpoint Calls</h4>
+                      <h1 class="primary" id="totalEndpointCallsLabel">Loading...</h1>
+                      <h4 style="color: white;">Total Reports in History</h4>
                     </div>
                     
                     <div class="primary align-self-center">
@@ -772,10 +839,22 @@
 	            class="formbold-form-input" required
 	          />
 	        </div>
+
+          <div class="formbold-mb-5">
+	          <label for="code" class="formbold-form-label">
+	            Select the code: <span class="required"> *</span>
+	          </label>
+            <select name="code" id="codeHistory" formControlName="code" class="formbold-form-input" required>
+              <option value="400">400</option>
+              <option value="404">404</option>
+              <option value="500">500</option>
+              <option value="503">503</option>
+            </select>
+	        </div>
 	
 	
 	          <div>
-	            <button class="formbold-btn w-full" id="addApplicationBtn" style="margin-top: 20px;" onclick="addReport()">
+	            <button class="formbold-btn w-full" id="reportBtn" style="margin-top: 20px;" onclick="addReport()">
 	              Report
 	            </button>
 	          </div>
